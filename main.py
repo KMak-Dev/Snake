@@ -39,7 +39,7 @@ background = pygame.image.load('Background.png')
 snake = pygame.image.load('snake.png')
 fruit = pygame.image.load('fruit.png')
 Snake = []
-gameOvr = font.render(" GAME OVER! ", True, (255, 255, 255))
+gameOvr = font.render(" GAME OVER! ", True, (128, 128, 128))
 
 # Music / Sound
 pygame.mixer.music.load('funky.wav')
@@ -63,13 +63,12 @@ def draw():
     screen.blit(background, (0, 0))
     screen.blit(fruit, (fruitX, fruitY))
     screen.blit(snake, (playerX, playerY))
-    scor = font.render("Score: " + str(score), True, (255, 255, 255))
-    screen.blit(scor, (0, HEIGHT / 2 - 300))
     index = 0
+    scor = font.render("Score: " + str(score), True, (128, 128, 128))
     while index < numTail:
         screen.blit(Snake[index], (tailX[index], tailY[index]))
         index += 1
-
+    screen.blit(scor, (0, HEIGHT / 2 - 300))
 
 def moveHead(direction):
     global playerX
@@ -112,6 +111,8 @@ def checkFruitEaten(pX, pY, fX, fY):
 def logic():
     global gameOver
     global numTail
+    global playerX
+    global playerY
     global tailX
     global tailY
     gameOver = checkGameOver(playerX, playerY)
@@ -142,7 +143,12 @@ while running:
         logic()
         draw()
     else:
+        font = pygame.font.Font('freesansbold.ttf', 20)
+        scor = font.render("Score: " + str(score), True, (128, 128, 128))
+        screen.fill((0, 0, 0))
+        screen.blit(background, (0, 0))
         screen.blit(gameOvr,(235,HEIGHT/2-30))
+        screen.blit(scor, (0, HEIGHT / 2 - 300))
         pygame.mixer.music.stop()
         if i == 0:
             death_sound.play()
