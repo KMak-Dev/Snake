@@ -136,34 +136,40 @@ def logic():
         prevY = prev2Y
         i += 1
 
+
+def end(i):
+    font = pygame.font.Font('freesansbold.ttf', 20)
+    scor = font.render("Score: " + str(score), True, (128, 128, 128))
+    screen.fill((0, 0, 0))
+    screen.blit(background, (0, 0))
+    screen.blit(gameOvr, (235, HEIGHT / 2 - 30))
+    screen.blit(scor, (0, HEIGHT / 2 - 300))
+    pygame.mixer.music.stop()
+    if i == 0:
+        death_sound.play()
+        i += 1
+    return i
+
 i = 0
 # Main Game-loop
 while running:
+
     if gameOver != True:
         logic()
         draw()
     else:
-        font = pygame.font.Font('freesansbold.ttf', 20)
-        scor = font.render("Score: " + str(score), True, (128, 128, 128))
-        screen.fill((0, 0, 0))
-        screen.blit(background, (0, 0))
-        screen.blit(gameOvr,(235,HEIGHT/2-30))
-        screen.blit(scor, (0, HEIGHT / 2 - 300))
-        pygame.mixer.music.stop()
-        if i == 0:
-            death_sound.play()
-            i += 1
+        i = end(i)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                dir = 2
             if event.key == pygame.K_w:
                 dir = 0
-            if event.key == pygame.K_d:
-                dir = 3
             if event.key == pygame.K_s:
                 dir = 1
+            if event.key == pygame.K_a:
+                dir = 2
+            if event.key == pygame.K_d:
+                dir = 3
     pygame.display.update()
