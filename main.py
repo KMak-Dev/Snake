@@ -58,7 +58,7 @@ def fruitGen():
 def draw():
     global score
     global numTail
-    time.sleep(0.15)
+    time.sleep(0.10)
     screen.fill((0, 0, 0))
     screen.blit(background, (0, 0))
     screen.blit(fruit, (fruitX, fruitY))
@@ -155,8 +155,8 @@ i = 0
 while running:
 
     if gameOver != True:
-        logic()
         draw()
+        logic()
     else:
         i = end(i)
 
