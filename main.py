@@ -177,7 +177,7 @@ def change_high_score(number):
 from_menu = False
 death_sound_count = 0
 music_count = 0
-i = 0
+
 
 # Main Game-loop
 while running:
@@ -235,7 +235,6 @@ while running:
                 if not from_menu:
                     music_count = 0
                 from_menu = False
-                i = 0
             if gameOver and event.key == pygame.K_ESCAPE:
                 flashing = 0
                 Menu = True
