@@ -5,6 +5,7 @@ import random
 import time
 import pygame
 
+
 pygame.init()
 pygame.mixer.pre_init(44100, 16, 1, 512)
 
@@ -59,8 +60,15 @@ score_sound = pygame.mixer.Sound('score.wav')
 def generate_fruit():
     global fruitX
     global fruitY
-    fruitX = random.randint(0, 15) * GRID_SIZE
-    fruitY = random.randint(2, 15) * GRID_SIZE
+    index = 0
+    fruitX = random.randint(0, 19) * GRID_SIZE
+    fruitY = random.randint(0, 19) * GRID_SIZE
+    while index < numTail:
+        if tailX[index] == fruitX and tailY[index] == fruitY:
+            fruitX = random.randint(0, 15) * GRID_SIZE
+            fruitY = random.randint(0, 15) * GRID_SIZE
+            index = 0
+        index += 1
 
 
 def draw():
@@ -99,7 +107,7 @@ def move_Head(direction):
 def check_Game_Over(x, y):
     global WIDTH
     global HEIGHT
-    if x > WIDTH or y > HEIGHT or x < 0 or y < 0:
+    if x > WIDTH - GRID_SIZE or y > HEIGHT - GRID_SIZE or x < 0 or y < 0:
         return True
     index = 0
     while index < numTail:
@@ -149,19 +157,27 @@ def end(count):
     screen.fill((0, 0, 0))
     screen.blit(background, (0, 0))
     score_display = font.render("Score: " + str(score), True, (254, 254, 254))
+    high_score_display = font.render("High Score: " + str(HIGH_SCORE), True, (254, 254, 254))
     screen.blit(gameOvr, (WIDTH / 2 - 170, HEIGHT / 2 - 50))
     screen.blit(score_display, (0, HEIGHT / 2 - 300))
+    screen.blit(high_score_display, (WIDTH/2 - 60, HEIGHT/2 + 50))
     if count == 0:
         death_sound.play()
         count += 1
     return count
 
 
+def change_high_score(number):
+    new_score = open("high_score.txt", 'w')
+    new_score.write(str(number))
+    new_score.close()
+
+
 # Handling Music
 from_menu = False
 death_sound_count = 0
 music_count = 0
-
+i = 0
 
 # Main Game-loop
 while running:
@@ -182,6 +198,11 @@ while running:
         draw()
         logic()
     else:
+        high_score = open("high_score.txt", 'r')
+        HIGH_SCORE = int(high_score.readline())
+        if score > HIGH_SCORE:
+            change_high_score(score)
+        high_score.close()
         death_sound_count = end(death_sound_count)
         if music_count < 2:
             pygame.mixer.music.stop()
@@ -214,6 +235,7 @@ while running:
                 if not from_menu:
                     music_count = 0
                 from_menu = False
+                i = 0
             if gameOver and event.key == pygame.K_ESCAPE:
                 flashing = 0
                 Menu = True
